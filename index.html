@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./styles/style.css"></link>
+</head>
+<body>
+        <!--Блок - компонент страницы, который может быть использован повторно.-->
+        <!--Блок характеризует наименование класса, который в свою очередь характеризует смысл блока ( class="menu" - блок, описывающий меню)-->
+        <!--Блоку не задаются параметры геометрии, н/р отступы, границы, размеры-->
+
+        <!--Элемент - составная часть блока, характеризирующая смысл блока (что за блок)-->
+        <!--menu, search-block - имя блока меню/поисковой блок, __name, __item - имя элемента меню -->
+        <!--общая структура "имя-блка__имя-элемента"-->
+        <!--Имя блока задает пространство имен, которое гарантирует зависимость элементов от блока-->
+
+        <!--Модификатор характеризует внешний вид (размер блока size_s, size_m, тема theme_black), состояние (отключенное состояние _disabled, фокусированный _focused) или поведение блока -->
+        <!--Структура через одно _ например: имя-блока_имя-модификатора или имя-блока__имя-элемента_имя-модификатора-->
+        <!--Модификатор можно использовать по принципу ключ-значение, н/р: имя-блока_имя-модификатора_значение-модификатора (menu_size_l, menu_theme_black)-->
+        <!--Модификатор должен изменять состояни, вид или поведение блока а не заменять блок-->
+
+        <!-- <ul class="menu">
+            <div class="search-block">Search block</div>
+            <div class="menu__name">Menu namw block</div>
+            <li class="menu__item">Menu item block 1</li>
+            <li class="menu__item">Menu item block 2</li>
+            <li class="menu__item">Menu item block 3</li>
+        </ul> -->
+
+        <!--Пример микса БЭМ. В блоке меню использовали блок поиска и с помощью класса-элемента блока меню можем задавать ему геометрию-->
+        <!-- <ul class="menu">
+            <div class="search-block menu__search-wrap"></div>
+            <li class="menu__item"></li>
+        </ul> -->
+        <div id="display"></div>
+<script src="./scripts/StartApp.js"></script>
+</body>
+</html>
