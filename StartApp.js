@@ -48,7 +48,7 @@ class GameDisplay {
 
 }
 
-class SelectGame extends GameDisplay {
+class Snake extends GameDisplay {
     
     constructor(width, height) {
         super(width, height)
@@ -123,41 +123,188 @@ class SelectGame extends GameDisplay {
 
 }
 
+class Tetris extends GameDisplay {
+    constructor(height, width) {
+        super(height, width)
+        this.figures = {
+            tank: [],
+            stick: [],
+            square: [],
+            zigzag: [],
+            hook: []
+        }
+        this.currentFigure = []
+        this.nextFigure = []
+    }
+
+    getNewFigure() {
+        return this.figures[this.chooseRandomFigure()]
+    }
+
+    chooseRandomFigure() {
+        return Object.keys(this.figures)[Math.floor(Math.random() * 5)]
+    }
+
+    startGame() {
+        Object.keys(this.figures).forEach((figureName, ifigure) => {
+            if (figureName === 'tank') {
+                this.figures[figureName].push([this.width/2 - 1, this.height + 2], [this.width/2, this.height + 2], [this.width/2 + 1, this.height + 2], [this.width/2, this.height + 1])
+            }
+            if (figureName === 'stick') {
+                this.figures[figureName].push([this.width/2, this.height + 4], [this.width/2, this.height + 3], [this.width/2, this.height + 2], [this.width/2, this.height + 1])
+            }
+            if (figureName === 'square') {
+                this.figures[figureName].push([this.width/2 - 1, this.height + 2], [this.width/2, this.height + 2], [this.width/2 - 1, this.height + 1], [this.width/2, this.height + 1])
+            }
+            if (figureName === 'zigzag') {
+                this.figures[figureName].push([this.width/2 - 1, this.height + 2], [this.width/2, this.height + 2], [this.width/2, this.height + 1], [this.width/2 + 1, this.height + 1])
+            }
+            if (figureName === 'hook') {
+                this.figures[figureName].push([this.width/2 - 1, this.height + 2], [this.width/2, this.height + 2], [this.width/2, this.height + 1], [this.width/2 + 1, this.height + 1])
+            }
+        })
+
+        this.currentFigure = this.getNewFigure()
+        this.nextFigure = this.getNewFigure()
+    }
+
+    getViewFigure(coordinate) {
+
+        if (this.checkCoordinate(coordinate).lower === -1) {
+            this.currentFigure.forEach((pixelLine) => {
+                const oldPxl = document.querySelector(`[xy="${pixelLine.join(':')}"]`)
+                if (oldPxl) {
+                    oldPxl.classList.remove('pixel-hero', 'tetris')
+                }
+            })
+    
+            coordinate.forEach((pixelLine) => {
+                const newPxl = document.querySelector(`[xy="${pixelLine.join(':')}"]`)
+                if (newPxl && !newPxl.classList.contains('pixel-hero')) {
+                    newPxl.classList.add('pixel-hero', 'tetris')
+                }
+            })
+
+            this.currentFigure = [...coordinate]
+        } else {
+            this.currentFigure.forEach((pixelLine) => {
+                const oldPxl = document.querySelector(`[xy="${pixelLine.join(':')}"]`)
+                if (oldPxl) {
+                    oldPxl.classList.add('lower')
+                }
+            })
+            
+            this.currentFigure = this.nextFigure
+            this.nextFigure = this.getNewFigure()
+        }
+
+    }
+
+    moveFigure(up, left) {
+        const newCoordinate = this.currentFigure.map(([x, y]) => {
+            return [x + up, y + left]
+        })
+        //console.log(this.checkCoordinate(newCoordinate))
+        this.checkCoordinate(newCoordinate).bckground === -1 ? this.getViewFigure(newCoordinate) : this.getNewFigure(this.currentFigure)
+    }
+
+    moveTurn(coordinate) {
+        const relativeCoordinate = coordinate[1]
+        const newCoordinate = coordinate.map(([x, y]) => {
+            const toRelativeCoordinate = [x - relativeCoordinate[0], y - relativeCoordinate[1]]
+            const newX = -(toRelativeCoordinate[1]) + relativeCoordinate[0]
+            const newY = toRelativeCoordinate[0] + relativeCoordinate[1]
+
+            return [newX, newY]
+        })
+
+        this.checkCoordinate(newCoordinate).bckground === -1 ? this.getViewFigure(newCoordinate) : this.getNewFigure(coordinate)
+    }
+
+    checkCoordinate(coordinate) {
+        const checkedCoordinat = coordinate.map(coordinateItem => {
+            const pxl = document.querySelector(`[xy="${coordinateItem.join(':')}"]`)
+            return (coordinateItem[1] < 1 || (pxl && pxl.classList.contains('lower')))
+            ? 'lower'
+            : (coordinateItem[0] < 1 || coordinateItem[0] > this.width)
+            ? 'bckground' : true
+        })
+        console.log(checkedCoordinat)
+        return {
+            lower: checkedCoordinat.indexOf('lower'),
+            bckground: checkedCoordinat.indexOf('bckground')
+        }
+    }
+}
+
+
+
+
 const DISP_WIDTH = 10
 const DISP_HEIGHT = 20
 const DISPLAY = new GameDisplay(DISP_WIDTH, DISP_HEIGHT)
 // DISPLAY.createDisplay(document.querySelector('#display'))
 
-const SELECT_GAME = new SelectGame(DISP_WIDTH, DISP_HEIGHT)
+// const SELECT_GAME = new Snake(DISP_WIDTH, DISP_HEIGHT)
+// SELECT_GAME.createDisplay(document.querySelector('#display'))
+// SELECT_GAME.getStartSnakePosition()
+// let timerID = null
+
+// document.addEventListener('keydown', (e) => {
+//     clearTimeout(timerID)
+//     if (e.code === 'ArrowUp') {
+//         timerID = setTimeout(function startMove() {
+//             SELECT_GAME.snakeMove(0, 1)
+//             timerID = setTimeout(startMove, 100)
+//         }, 100)
+//     }
+//     if (e.code === 'ArrowDown') {
+//         timerID = setTimeout(function startMove() {
+//             SELECT_GAME.snakeMove(0, -1)
+//             timerID = setTimeout(startMove, 100)
+//         }, 100)
+//     }
+//     if (e.code === 'ArrowRight') {
+//         timerID = setTimeout(function startMove() {
+//             SELECT_GAME.snakeMove(1, 0)
+//             timerID = setTimeout(startMove, 100)
+//         }, 100)
+//     }
+//     if (e.code === 'ArrowLeft') {
+//         timerID = setTimeout(function startMove() {
+//             SELECT_GAME.snakeMove(-1, 0)
+//             timerID = setTimeout(startMove, 100)
+//         }, 100)
+//     }
+// })
+
+const SELECT_GAME = new Tetris(DISP_WIDTH, DISP_HEIGHT)
 SELECT_GAME.createDisplay(document.querySelector('#display'))
-SELECT_GAME.getStartSnakePosition()
-let timerID = null
+SELECT_GAME.startGame()
+timerID = setTimeout(function startMove() {
+    SELECT_GAME.moveFigure(0, -1)
+    timerID = setTimeout(startMove, 500)
+}, 500)
+
 
 document.addEventListener('keydown', (e) => {
-    clearTimeout(timerID)
-    if (e.code === 'ArrowUp') {
-        timerID = setTimeout(function startMove() {
-            SELECT_GAME.snakeMove(0, 1)
-            timerID = setTimeout(startMove, 100)
-        }, 100)
+    
+    if (e.code === 'Enter') {
+        clearTimeout(timerID)
+        SELECT_GAME.currentFigure = SELECT_GAME.getNewFigure()
+    }
+    if (e.code === 'Space') {
+        SELECT_GAME.moveTurn(SELECT_GAME.currentFigure)
     }
     if (e.code === 'ArrowDown') {
-        timerID = setTimeout(function startMove() {
-            SELECT_GAME.snakeMove(0, -1)
-            timerID = setTimeout(startMove, 100)
-        }, 100)
-    }
-    if (e.code === 'ArrowRight') {
-        timerID = setTimeout(function startMove() {
-            SELECT_GAME.snakeMove(1, 0)
-            timerID = setTimeout(startMove, 100)
-        }, 100)
+        SELECT_GAME.moveFigure(0, -1)
     }
     if (e.code === 'ArrowLeft') {
-        timerID = setTimeout(function startMove() {
-            SELECT_GAME.snakeMove(-1, 0)
-            timerID = setTimeout(startMove, 100)
-        }, 100)
+        SELECT_GAME.moveFigure(-1, 0)
+    }
+    if (e.code === 'ArrowRight') {
+        SELECT_GAME.moveFigure(1, 0)
     }
 })
-//console.log(SELECT_GAME.matrix)
+
+console.log(SELECT_GAME)
