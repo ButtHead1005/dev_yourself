@@ -229,7 +229,7 @@ class Tetris extends GameDisplay {
             : (coordinateItem[0] < 1 || coordinateItem[0] > this.width)
             ? 'bckground' : true
         })
-        console.log(checkedCoordinat)
+        
         return {
             lower: checkedCoordinat.indexOf('lower'),
             bckground: checkedCoordinat.indexOf('bckground')
@@ -243,40 +243,6 @@ class Tetris extends GameDisplay {
 const DISP_WIDTH = 10
 const DISP_HEIGHT = 20
 const DISPLAY = new GameDisplay(DISP_WIDTH, DISP_HEIGHT)
-// DISPLAY.createDisplay(document.querySelector('#display'))
-
-// const SELECT_GAME = new Snake(DISP_WIDTH, DISP_HEIGHT)
-// SELECT_GAME.createDisplay(document.querySelector('#display'))
-// SELECT_GAME.getStartSnakePosition()
-// let timerID = null
-
-// document.addEventListener('keydown', (e) => {
-//     clearTimeout(timerID)
-//     if (e.code === 'ArrowUp') {
-//         timerID = setTimeout(function startMove() {
-//             SELECT_GAME.snakeMove(0, 1)
-//             timerID = setTimeout(startMove, 100)
-//         }, 100)
-//     }
-//     if (e.code === 'ArrowDown') {
-//         timerID = setTimeout(function startMove() {
-//             SELECT_GAME.snakeMove(0, -1)
-//             timerID = setTimeout(startMove, 100)
-//         }, 100)
-//     }
-//     if (e.code === 'ArrowRight') {
-//         timerID = setTimeout(function startMove() {
-//             SELECT_GAME.snakeMove(1, 0)
-//             timerID = setTimeout(startMove, 100)
-//         }, 100)
-//     }
-//     if (e.code === 'ArrowLeft') {
-//         timerID = setTimeout(function startMove() {
-//             SELECT_GAME.snakeMove(-1, 0)
-//             timerID = setTimeout(startMove, 100)
-//         }, 100)
-//     }
-// })
 
 const SELECT_GAME = new Tetris(DISP_WIDTH, DISP_HEIGHT)
 SELECT_GAME.createDisplay(document.querySelector('#display'))
