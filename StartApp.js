@@ -204,7 +204,7 @@ class Tetris extends GameDisplay {
         const newCoordinate = this.currentFigure.map(([x, y]) => {
             return [x + up, y + left]
         })
-        //console.log(this.checkCoordinate(newCoordinate))
+        
         this.checkCoordinate(newCoordinate).bckground === -1 ? this.getViewFigure(newCoordinate) : this.getNewFigure(this.currentFigure)
     }
 
